@@ -8,7 +8,7 @@ const ws_1 = __importDefault(require("ws"));
 const jsonfile_1 = __importDefault(require("jsonfile"));
 const node_fetch_1 = __importDefault(require("node-fetch"));
 const env_1 = require("../util/env");
-const createWebhook = async (channelId) => node_fetch_1.default(`https://discord.com/api/v8/channels/${channelId}/webhooks`, {
+const createWebhook = async (channelId) => (0, node_fetch_1.default)(`https://discord.com/api/v8/channels/${channelId}/webhooks`, {
     method: 'POST',
     headers: env_1.headers,
     body: JSON.stringify({
@@ -17,7 +17,7 @@ const createWebhook = async (channelId) => node_fetch_1.default(`https://discord
 }).then((res) => res.json())
     .then((json) => `https://discord.com/api/v8/webhooks/${json.id}/${json.token}`);
 exports.createWebhook = createWebhook;
-const executeWebhook = async ({ content, embeds, username, url, avatar, }) => node_fetch_1.default(url, {
+const executeWebhook = async ({ content, embeds, username, url, avatar, }) => (0, node_fetch_1.default)(url, {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',
@@ -30,7 +30,7 @@ const executeWebhook = async ({ content, embeds, username, url, avatar, }) => no
     }),
 });
 exports.executeWebhook = executeWebhook;
-const createChannel = async (name, pos, newId, parentId) => node_fetch_1.default(`https://discord.com/api/v8/guilds/${newId}/channels`, {
+const createChannel = async (name, pos, newId, parentId) => (0, node_fetch_1.default)(`https://discord.com/api/v8/guilds/${newId}/channels`, {
     method: 'POST',
     headers: env_1.headers,
     body: JSON.stringify({
@@ -91,7 +91,7 @@ const listen = async () => {
                         url: webhookUrl,
                         avatar: avatarUrl,
                     };
-                    exports.executeWebhook(hookContent);
+                    (0, exports.executeWebhook)(hookContent);
                 }
                 break;
             default:
@@ -100,7 +100,7 @@ const listen = async () => {
     });
 };
 exports.listen = listen;
-const getChannels = async () => node_fetch_1.default(`https://discord.com/api/v8/guilds/${env_1.serverId}/channels`, {
+const getChannels = async () => (0, node_fetch_1.default)(`https://discord.com/api/v8/guilds/${env_1.serverId}/channels`, {
     method: 'GET',
     headers: env_1.headers,
 }).then((res) => res.json())
@@ -115,7 +115,7 @@ const createServer = async (channels) => {
         channels: categories,
     };
     const serverMap = new Map();
-    const serverResp = await node_fetch_1.default('https://discord.com/api/v8/guilds', {
+    const serverResp = await (0, node_fetch_1.default)('https://discord.com/api/v8/guilds', {
         method: 'POST',
         headers: env_1.headers,
         body: JSON.stringify(body),
@@ -123,7 +123,7 @@ const createServer = async (channels) => {
     const server = await serverResp.json();
     const newId = server.id;
     serverMap.set('serverId', newId);
-    const channelResp = await node_fetch_1.default(`https://discord.com/api/v8/guilds/${newId}/channels`, {
+    const channelResp = await (0, node_fetch_1.default)(`https://discord.com/api/v8/guilds/${newId}/channels`, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: env_1.discordToken,
@@ -137,8 +137,8 @@ const createServer = async (channels) => {
                 if (parentChannel) {
                     const newParentChannel = serverChannels.find((chan) => chan.name === parentChannel.name);
                     if (newParentChannel) {
-                        const newChannel = await exports.createChannel(channel.name, channel.position, newId, newParentChannel.id);
-                        const newWebhook = await exports.createWebhook(newChannel.id);
+                        const newChannel = await (0, exports.createChannel)(channel.name, channel.position, newId, newParentChannel.id);
+                        const newWebhook = await (0, exports.createWebhook)(newChannel.id);
                         serverMap.set(channel.id, newWebhook);
                     }
                 }
