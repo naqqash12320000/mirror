@@ -81,13 +81,13 @@ const listen = async () => {
             case 0:
                 if (message.t === 'MESSAGE_CREATE' && message.d.guild_id === env_1.serverId) {
                     const { content, embeds, channel_id: channelId } = message.d;
-                    const { avatar, username, id, discriminator, } = message.d.author;
+                    const { avatar, username, id,  } = message.d.author;
                     const avatarUrl = `https://cdn.discordapp.com/avatars/${id}/${avatar}.png`;
                     const webhookUrl = serverMap[channelId];
                     const hookContent = {
                         content,
                         embeds,
-                        username: `${username}#${discriminator}`,
+                        username: `${username}`,
                         url: webhookUrl,
                         avatar: avatarUrl,
                     };
